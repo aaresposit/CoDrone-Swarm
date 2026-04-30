@@ -26,6 +26,9 @@ def try_change_colors():
             print(f"There are {drone_count} drones connected")
             break
 
+def move_drones():
+    drone.send_absolute_position(0.5, 0, 1, 0.5, 0, 0)
+
 def main():
     swarm.connect()
     #swarm.takeoff()
