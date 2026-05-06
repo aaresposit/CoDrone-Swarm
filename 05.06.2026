@@ -1,0 +1,6 @@
+from codrone_edu.swarm import *
+swarm = Swarm()
+swarm.connect()
+swarm.takeoff
+swarm.land()
+swarm.disconnect()
