@@ -48,23 +48,100 @@ def main():
 
 
 
+
+# Server
+
+# Aaron Hoddy
+# 4/22/2026
+# This file exists to prove I understand what I am doing
+
+# Step 1: Import
+
 import socket
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind(('0.0.0.0', 0000))  # Listen on all interfaces, port 0000
-s.listen(1)
+import sys
+import time
 
-print("Waiting for input from another computer...")
-conn, addr = s.accept()  # This line PAUSES the code until someone connects
-print(f"Connected by {addr}")
+# Step 2: host, port, socket variables
 
-data = conn.recv(1024)   # This line PAUSES until data is sent
-print(f"Received message: {data.decode()}")
-if {data.decode()} == "go":
-    import 
+host = ""
+port = 9999
+socket = socket.socket()
+# print(socket)
 
-conn.close()
+# Step 3: Bind
+
+def bind_socket():
+    try:
+        socket.bind((host,port))
+        socket.listen(5)
+    except:
+        print("Retry bind\r")
+        bind_socket()
+bind_socket()
+
+# Step 4: Accept
+
+connection,address = socket.accept()
+print(f"Connection established: {address}")
+
+# Step 5: Send data
+
+command_list = ["python3 -c 'print()'", "python3 -c 'print('Hi, sorta!')'"
+                "python3 C:\\Users\\hodda2\\Desktop\\test.py",
+                "python3 -c connection.close() && python3 -c socket.close()"] 
+
+for command in command_list:
+    connection.send(str.encode(command))
+    print("Waiting for response")
+    print(str(connection.recv(1024),"utf-8"), "\n")
+
+connection.close()
+socket.close()
+print("connection was closed")
 
 
 
 
+# Client
 
+# Aaron Hoddy
+# 4/22/26
+# Proof that I understand client.py
+
+# Step 1: Import
+
+import socket
+import os
+import subprocess
+
+# Step 2: Variables
+
+host = "192.168.0." # server ip
+port = 9999 # server port
+socket = socket.socket()
+# print(socket)
+
+# Step 3: Connect
+
+socket.connect((host,port))
+print("Connected")
+
+# Step 4: Receive data
+
+while True:
+    data = socket.recv(1024)
+    if len(data) > 0:
+        print(data)
+        input("This is data. Hit enter to continue:\n")
+        command = subprocess.Popen(data.decode("utf-8"), shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+        print(command)
+        input("This is command. Hit enter to continue:\n")
+        output_byte = command.stdout.read() + command.stderr.read()
+        print(output_byte)
+        input("This is output_byte. Hit enter to continue:\n")
+        output_str = str(output_byte, "utf-8")
+        socket.send(str.encode(output_str))
+        print(output_str)
+        print("Sent back.")
+    #if len(data) > 0:
+    #    subprocess.Popen((socket.recv(1024)).decode("utf-8"), shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
