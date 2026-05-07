@@ -45,7 +45,25 @@ def main():
     swarm.connect()
     flowing_pattern(2, 'blue')
     swarm.disconnect()
-    
+
+
+
+import socket
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind(('0.0.0.0', 0000))  # Listen on all interfaces, port 0000
+s.listen(1)
+
+print("Waiting for input from another computer...")
+conn, addr = s.accept()  # This line PAUSES the code until someone connects
+print(f"Connected by {addr}")
+
+data = conn.recv(1024)   # This line PAUSES until data is sent
+print(f"Received message: {data.decode()}")
+if {data.decode()} == "go":
+    import 
+
+conn.close()
+
 
 
 
