@@ -24,9 +24,21 @@ connection2,address2 = socket.accept()
 print(f"Connection established: {address2}")
 connection3,address3 = socket.accept()
 print(f"Connection established: {address3}")
+#connections = addresses = []
+#user_input = 'yes'
+#i = 0
+#while user_input == 'yes' or user_input == 'y':
+#    i += 1
+#    connections[i],addresses[i] = socket.accept()
+#    print(f"Connection established: {address[i]}")
+#    user_input = input("More computers?")
+    # better to learn threading?
+
 
 # Step 3: Send data
 command = input("Type 'go' to start:")
+#for connection in connections:
+#    connection.send(str.encode(command))
 connection.send(str.encode(command))
 connection2.send(str.encode(command))
 connection3.send(str.encode(command))
