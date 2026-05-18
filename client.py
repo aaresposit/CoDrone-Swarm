@@ -1,20 +1,21 @@
-# 5/7/26
-#
+# 5/18/26
+# client file that receives an instruction to run choreography file
 
 import socket
 
-host = "192.168.0.0" # server computer's ip
-port = 9999 # server port
-socket = socket.socket()
+HOST = "192.168.0.196" # server computer's ip
+PORT = 9999 # server port
+s = socket.socket()
 
-socket.connect((host,port))
+s.connect((HOST,PORT))
 print("Connected")
 
 while True:
-    data = socket.recv(1024)
+    data = s.recv(1024)
     command = data.decode("utf-8")
     if command == "go":
-        socket.send(str.encode("received"))
+        reply = "received"
+        s.send(reply.encode("utf-8"))
         print("Running file.")
-        import name   # insert name of file to run here
-        socket.close()
+        import test_flight   # insert name of file to run here
+        s.close()
