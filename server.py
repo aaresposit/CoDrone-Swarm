@@ -1,50 +1,48 @@
-# 5/7/2026
-# Server file that sends command to all clients to run drone code and runs its own.
+# 5/18/2026
+# Server file that sends command to all clients to run their choreography files and runs its own.
 
 import socket
+HOST = ""
+PORT = 9999
+s = socket.socket()
 
-host = ""
-port = 9999
-socket = socket.socket()
 
 # Step 1: Bind
 def bind_socket():
     try:
-        socket.bind((host,port))
-        socket.listen(5)
+        s.bind((HOST,PORT))
+        s.listen(5)
     except:
         print("Retry bind\r")
         bind_socket()
 bind_socket()
 
+
 # Step 2: Accept (3 connections)
-connection,address = socket.accept()
-print(f"Connection established: {address}")
-connection2,address2 = socket.accept()
-print(f"Connection established: {address2}")
-connection3,address3 = socket.accept()
-print(f"Connection established: {address3}")
-#connections = addresses = []
-#user_input = 'yes'
-#i = 0
-#while user_input == 'yes' or user_input == 'y':
-#    i += 1
-#    connections[i],addresses[i] = socket.accept()
-#    print(f"Connection established: {address[i]}")
-#    user_input = input("More computers?")
-    # better to learn threading?
+print("How many computers will connect to this one?")
+amount_connecting = None
+while type(amount_connecting) != int:
+    try:
+        amount_connecting = int(input())
+    except:
+        print("Please enter a whole number.")
+
+print(f"Okay, waiting for {amount_connecting} computers to connect.")
+connections = []
+addresses = []
+for computer in range(amount_connecting):
+    connection,address = s.accept()
+    connections.append(connection)
+    addresses.append(address)
+    print(f"Connection established: {address}")
 
 
 # Step 3: Send data
 command = input("Type 'go' to start:")
-#for connection in connections:
-#    connection.send(str.encode(command))
-connection.send(str.encode(command))
-connection2.send(str.encode(command))
-connection3.send(str.encode(command))
-print("Waiting for response")
-if str(connection.recv(1024),"utf-8") == str(connection2.recv(1024),"utf-8") == str(connection3.recv(1024),"utf-8") == 'received':
-    import name   # insert name of file to be executed
-    connection.close()
-    socket.close()
-    print("connection was closed")
+for conn in connections:
+    conn.send(str.encode(command))
+    conn.close()
+import test_flight   # insert name of file to be executed
+s.close()
+print("connection was closed")
+
