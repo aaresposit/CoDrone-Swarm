@@ -4,7 +4,7 @@
 import drone
 from codrone_edu.swarm import *
 
-swarm = Swarm(enable_color=True, enable_print=True, enable_pause=False)
+swarm = Swarm(enable_color=True, enable_print=True, enable_pause=True)
 cycle_num = 0
 
 
