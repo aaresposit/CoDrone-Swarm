@@ -3,6 +3,7 @@
 
 # Step 1: Set up socket
 import socket
+import choreographyfilename
 HOST = ""
 PORT = 9999
 s = socket.socket()
@@ -16,7 +17,7 @@ print("How many computers will connect to this one?")
 # If whole number greater than 0, break out of loop
 while True:
     try:
-        amount_connecting = int(input("Enter a whole number greater than zero:"))
+        amount_connecting = int(input("Enter a whole number greater than zero: "))
         if amount_connecting > 0:
             break
     except:
@@ -28,26 +29,33 @@ connections = []
 addresses = []
 # For each of the # of computers: connect to a computer, store its information, and tell it which number it is
 for computer in range(amount_connecting):
-    connection,address = s.accept()
-    connections.append(connection)
-    addresses.append(address)
-    print(f"Connection {computer+1} established: {address}")
+    conn, addr = s.accept()
+    connections.append(conn)
+    addresses.append(addr)
+    print(f"Connection {computer+1} established: {addr}")
     message = f"This computer is connection {computer+1}."
-    connection.send(message.encode("utf-8"))
+    conn.send(message.encode("utf-8"))
 
 
 # Step 3: Send data
+# Loop and get user input for message sent
+# Send message to every connection in the connections list; if error message, print which computer and address and remove it from connections.
+# If message is "run", run choreography file
+# If message is "exit", close connections and break out of loop
 while True:
     message = input("Type 'run' to run choreography files, or 'exit' to disconnect all computers: ")
     message = message.lower()
-    for conn,addr in zip(connections,addresses):
+    for conn, addr, computer in zip(connections, addresses, range(amount_connecting)):
         try:
             conn.send(message.encode("utf-8"))
-            if message == "exit":
-                conn.close()
         except:
-            print(f"Could not send to {addr}. Check client computer.")
+            print(f"Could not send to connection {computer+1} at {addr}.")
+            connections.remove(conn)
     if message == "run":
-        drone_choreography.main()   # same name as import with .main() attached to end
+        choreographyfilename.main()   # same name as import with .main() attached to end
+    if message == "exit":
+        for conn in connections:
+            conn.close()
+        break
 s.close()
 print("Connection was closed.")
