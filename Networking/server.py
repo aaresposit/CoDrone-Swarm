@@ -1,4 +1,4 @@
-# 5/18/2026
+# 5/19/2026
 # Server file that sends command to all clients to run their choreography files and runs its own.
 
 # Step 1: Set up socket
