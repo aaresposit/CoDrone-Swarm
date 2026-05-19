@@ -1,4 +1,5 @@
 # 5/19/2026
+# A sequence lasting ~20 seconds where the drones takeoff, change LED colors (white, red, blue, off), and lands
 
 from codrone_edu.swarm import *
 
