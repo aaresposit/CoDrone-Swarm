@@ -3,7 +3,7 @@
 
 import socket
 import threading
-from codrone import drone_choreography
+import subprocess
 
 HOST = ''
 PORT = 9999
@@ -47,7 +47,9 @@ while True:
     if msg == 'exit':
         break
     if msg == 'run':
-        print("Running file.")
         send_command(msg)
-        drone_choreography.main()
+        print("Running file. File Output:\n")
+        subprocess.run(['python','EXAMPLE.py'])   # name of file should replace EXAMPLE.py
+        print("\n")
+    if msg == 'file':
 server.close()
