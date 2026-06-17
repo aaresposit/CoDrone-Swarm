@@ -4,6 +4,11 @@
 import socket
 import threading
 import subprocess
+import sys
+from pathlib import Path
+grandparent_dir = str(Path(__file__).resolve().parent.parent)
+print(grandparent_dir)
+file = 'EXAMPLE.py'
 
 HOST = ''
 PORT = 9999
@@ -42,14 +47,19 @@ listener_thread.start()
 # Main thread is now completely free to broadcast at any time
 print("Server is running.")
 while True:
-    msg = input("Type 'run' to run choreography files, or 'exit' to disconnect all computers: ")
+    msg = input("Type 'run', 'file', or 'exit': ")
     msg = msg.lower()
     if msg == 'exit':
         break
     if msg == 'run':
         send_command(msg)
         print("Running file. File Output:\n")
-        subprocess.run(['python','EXAMPLE.py'])   # name of file should replace EXAMPLE.py
+        subprocess.run([sys.executable, file])   # fancy way to execute file
         print("\n")
     if msg == 'file':
+        send_command(msg)
+        file = input("Insert name of file being run (with .py): ")
+        file_msg = file.removeprefix(grandparent_dir)
+        print(f"File suffix is: {file_msg}")
+        send_command(file_msg)
 server.close()
