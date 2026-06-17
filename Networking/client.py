@@ -3,6 +3,11 @@
 
 import socket
 import subprocess
+import sys
+from pathlib import Path
+grandfather_dir = str(Path(__file__).resolve().parent.parent)
+print(grandfather_dir)
+file = 'EXAMPLE.py'
 
 # Connect to the socket that the server is using
 HOST = "192.168.0.162" # server computer's ip
@@ -15,15 +20,24 @@ print("Connected.")
 # if the message is "run", run file we imported;
 # if the message is "exit" or '', break out of loop
 # else if the message is something else, print the message
+receiving_file = False
 while True:
     data = s.recv(1024)
     message = data.decode("utf-8")
-    if message == "run":
+    if receiving_file:
+        if len(message) > 0:
+            file = grandfather_dir + message
+            print(f'File received: {file}')
+            receiving_file = False
+    elif message == "run":
         print("Running file. File Output:\n")
-        subprocess.run(['python','EXAMPLE.py'])   # name of file should replace EXAMPLE.py
+        subprocess.run([sys.executable,file])
         print("\n")
     elif message == "exit" or '':
         break
+    elif message == "file":
+        print('Waiting for file.')
+        receiving_file = True
     else:
         print(message)
 # When loop stops, close connection
