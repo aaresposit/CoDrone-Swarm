@@ -1,15 +1,19 @@
-# 5/19/2026
+# 6/17/2026
 # Server file that sends command to all clients to run their choreography files and runs its own.
 
 # Step 1: Set up socket
 import socket
-import choreographyfilename
+import subprocess
 HOST = ""
 PORT = 9999
 s = socket.socket()
 s.bind((HOST,PORT))
 s.listen()
 
+# Print ip address for others to see and change
+hostname = socket.gethostname()
+local_ip = socket.gethostbyname(hostname)
+print(f"Local IP Address: {local_ip}")
 
 # Step 2: Accept Connections
 print("How many computers will connect to this one?")
@@ -52,7 +56,9 @@ while True:
             print(f"Could not send to connection {computer+1} at {addr}.")
             connections.remove(conn)
     if message == "run":
-        choreographyfilename.main()   # same name as import with .main() attached to end
+        print("Running file. Output:\n")
+        subprocess.run(['python','EXAMPLE.py'])   # name of file should replace EXAMPLE.py
+        print("\n")
     if message == "exit":
         for conn in connections:
             conn.close()
