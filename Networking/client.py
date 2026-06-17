@@ -1,11 +1,11 @@
-# 5/19/26
+# 6/17/26
 # client file that receives an instruction to run choreography file
 
 import socket
-import choreographyfilename   # import name of file that contains choreography code
+import subprocess
 
 # Connect to the socket that the server is using
-HOST = "10.197.228.127" # server computer's ip
+HOST = "192.168.0.162" # server computer's ip
 PORT = 9999 # server computer's port
 s = socket.socket()
 s.connect((HOST,PORT))
@@ -19,8 +19,9 @@ while True:
     data = s.recv(1024)
     message = data.decode("utf-8")
     if message == "run":
-        print("Running file.")
-        choreographyfilename.main()
+        print("Running file. File Output:\n")
+        subprocess.run(['python','EXAMPLE.py'])   # name of file should replace EXAMPLE.py
+        print("\n")
     elif message == "exit" or '':
         break
     else:
